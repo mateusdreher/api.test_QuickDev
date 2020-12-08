@@ -1,9 +1,0 @@
-version: "0.0.1"
-services: 
-  api:
-    build: .
-    volumes: 
-      - ./api:/var/www/html
-    ports: 
-      - "80:80"
-      - "443:443"

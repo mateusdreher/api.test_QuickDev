@@ -13,6 +13,14 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    return $router->app->version();
+$router->group(['prefix' => '/api/movies'], function() use($router){
+    $router->get('', 'MovieController@getAllMovies');
+    $router->get('/{movieId}', 'MovieController@getMovieDetails');
+    $router->get('/name/{movieName}', 'MovieController@getMoviesByName');
+    $router->get('/genre/{genre}', 'MovieController@getMoviesByGenre');
 });
+
+$router->get('/', function () use ($router) {
+    return 'teste';
+});
+
