@@ -63,18 +63,39 @@ class MovieService {
     }
 
     public function getMoviesByGenre(int $genreId) {
+        $endpoint = 'discover/movie?api_key=4ec327e462149c3710d63be84b81cf4f&sort_by=popularity.desc&include_adult=false&with_genres=' . $genreId;
+
+        try {
+            $data = $this->request->make($endpoint);
+
+            return $this->getMovieGenres(json_decode($data)->results);
+        
+        } catch (Exception $exception) {
+            return response()->json(Response::HTTP_INTERNAL_SERVER_ERROR, 'Erro');
+        }
 
     }
 
+    public function getGenres() {
+        $endpoint = 'genre/movie/list?api_key=4ec327e462149c3710d63be84b81cf4f';
+    
+        try {
+            return $this->request->make($endpoint);
+
+        } catch (Exception $exception) {
+            return response()->json(Response::HTTP_INTERNAL_SERVER_ERROR, 'Erro');
+        }
+    }
+
     private function getMovieGenres(array $movies) {
-        $endpoint = 'genre/movie/list?api_key=4ec327e462149c3710d63be84b81cf4f&language=en-US';
+        $endpoint = 'genre/movie/list?api_key=4ec327e462149c3710d63be84b81cf4f';
         $genreNames = [];
         $newMovies = [];
 
         try {
 
-            $genresList = $this->request->make($endpoint);
-
+            // $genresList = $this->request->make($endpoint);
+            $genresList = $this->getGenres();
             foreach ($movies as $movie => $movieInfos) {
                 $genreNames = [];
                 foreach($movieInfos->genre_ids as $movieInfoGenreId) {

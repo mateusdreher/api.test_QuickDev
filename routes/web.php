@@ -15,9 +15,10 @@
 
 $router->group(['prefix' => '/api/movies'], function() use($router){
     $router->get('', 'MovieController@getAllMovies');
-    $router->get('/{movieId}', 'MovieController@getMovieDetails');
-    $router->get('/name/{movieName}', 'MovieController@getMoviesByName');
-    $router->get('/genre/{genre}', 'MovieController@getMoviesByGenre');
+    $router->get('/details/{movieId}', 'MovieController@getMovieDetails');
+    $router->get('/genres', 'MovieController@getGenres'); 
+    $router->get('/filter/genre/{genreId}', 'MovieController@getMoviesByGenre');
+    $router->get('/filter/name/{movieName}', 'MovieController@getMoviesByName');
 });
 
 $router->get('/', function () use ($router) {

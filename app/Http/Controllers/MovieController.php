@@ -25,11 +25,18 @@ class MovieController extends Controller
         return $this->movieService->getMovieDetails($movieId);
     }
 
-    public function getMoviesByName (string $movieName) {
+    public function getMoviesByName(string $movieName) {
+        if($movieName === '') {
+            return $this->movieService->getAllMovies();
+        }
         return $this->movieService->getMoviesByName($movieName);
     }
 
     public function getMoviesByGenre (int $genreId) {
         return $this->movieService->getMoviesByGenre($genreId);
+    }
+
+    public function getGenres() {
+        return $this->movieService->getGenres();
     }
 }
