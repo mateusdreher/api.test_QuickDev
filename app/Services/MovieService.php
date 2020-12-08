@@ -6,18 +6,15 @@ use Exception;
 use Illuminate\Http\Response;
 use App\Services\RequestService;
 use App\Services\Filters\NameFilter;
-use App\Services\Filters\GenreFilter;
 
 class MovieService {
 
     private RequestService $request;
     private NameFilter $nameFilter;
-    private GenreFilter $genreFilter;
 
-    public function __construct(RequestService $request, NameFilter $nameFilter, GenreFilter $genreFilter) {
+    public function __construct(RequestService $request, NameFilter $nameFilter) {
         $this->request = $request;
         $this->nameFilter = $nameFilter;
-        $this->genreFilter = $genreFilter;
     }
 
     public function getAllMovies() {
@@ -36,11 +33,11 @@ class MovieService {
     }
 
     public function getMovieDetails(int $movieId) {
-
+        $endpoint = 'movie/'. $movieId .'?api_key=4ec327e462149c3710d63be84b81cf4f';
+        
         try {
 
-            return $this->request->make($movieId);
-        
+            return $this->request->make($endpoint);
         } catch (Exception $exception) {
             return response()->json(Response::HTTP_INTERNAL_SERVER_ERROR, 'Erro');
         }
@@ -78,7 +75,7 @@ class MovieService {
 
     public function getGenres() {
         $endpoint = 'genre/movie/list?api_key=4ec327e462149c3710d63be84b81cf4f';
-    
+
         try {
             return $this->request->make($endpoint);
 
@@ -88,13 +85,10 @@ class MovieService {
     }
 
     private function getMovieGenres(array $movies) {
-        $endpoint = 'genre/movie/list?api_key=4ec327e462149c3710d63be84b81cf4f';
         $genreNames = [];
         $newMovies = [];
 
         try {
-
-            // $genresList = $this->request->make($endpoint);
             $genresList = $this->getGenres();
             foreach ($movies as $movie => $movieInfos) {
                 $genreNames = [];
