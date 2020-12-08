@@ -22,6 +22,9 @@ $router->group(['prefix' => '/api/movies'], function() use($router){
 });
 
 $router->get('/', function () use ($router) {
-    return 'teste';
+    return response()->json([
+        'name' => 'Api Filmow',
+        'version' => '2020.0.1'
+    ]);
 });
 

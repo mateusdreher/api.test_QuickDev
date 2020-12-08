@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Exception;
+use Prophecy\Exception\Exception;
 use Illuminate\Http\Response;
 use App\Services\RequestService;
 use App\Services\Filters\NameFilter;
@@ -20,68 +20,45 @@ class MovieService {
     public function getAllMovies() {
         $endpoint = 'discover/movie?api_key=4ec327e462149c3710d63be84b81cf4f&sort_by=popularity.desc&include_adult=false';
 
-        try {
-            $ret = $this->request->make($endpoint);
+        $ret = $this->request->make($endpoint);
 
-            $movies = $this->getMovieGenres(json_decode($ret)->results);         
-            
-            return $movies;
-        } catch (Exception $exception) {
-            return response()->json(Response::HTTP_INTERNAL_SERVER_ERROR, 'Erro');
-        }
+        $movies = $this->getMovieGenres(json_decode($ret)->results);         
+        
+        return $movies;
         
     }
 
     public function getMovieDetails(int $movieId) {
         $endpoint = 'movie/'. $movieId .'?api_key=4ec327e462149c3710d63be84b81cf4f';
         
-        try {
-
-            return $this->request->make($endpoint);
-        } catch (Exception $exception) {
-            return response()->json(Response::HTTP_INTERNAL_SERVER_ERROR, 'Erro');
-        }
+        return $this->request->make($endpoint);
 
     }
 
     public function getMoviesByName(string $movieName) {
         $endpoint = 'discover/movie?api_key=4ec327e462149c3710d63be84b81cf4f&sort_by=popularity.desc&include_adult=false';
 
-        try {
-            $data = $this->request->make($endpoint);
+        $data = $this->request->make($endpoint);
 
-            $movies = $this->nameFilter->filter(json_decode($data)->results, $movieName);
+        $movies = $this->nameFilter->filter(json_decode($data)->results, $movieName);
 
-            return $this->getMovieGenres($movies);
-        
-        } catch (Exception $exception) {
-            return response()->json(Response::HTTP_INTERNAL_SERVER_ERROR, 'Erro');
-        }
+        return $this->getMovieGenres($movies);
     }
 
     public function getMoviesByGenre(int $genreId) {
         $endpoint = 'discover/movie?api_key=4ec327e462149c3710d63be84b81cf4f&sort_by=popularity.desc&include_adult=false&with_genres=' . $genreId;
 
-        try {
-            $data = $this->request->make($endpoint);
+        $data = $this->request->make($endpoint);
 
-            return $this->getMovieGenres(json_decode($data)->results);
-        
-        } catch (Exception $exception) {
-            return response()->json(Response::HTTP_INTERNAL_SERVER_ERROR, 'Erro');
-        }
+        return $this->getMovieGenres(json_decode($data)->results);
 
     }
 
     public function getGenres() {
         $endpoint = 'genre/movie/list?api_key=4ec327e462149c3710d63be84b81cf4f';
 
-        try {
-            return $this->request->make($endpoint);
+        return $this->request->make($endpoint);
 
-        } catch (Exception $exception) {
-            return response()->json(Response::HTTP_INTERNAL_SERVER_ERROR, 'Erro');
-        }
     }
 
     private function getMovieGenres(array $movies) {
